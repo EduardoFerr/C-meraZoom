@@ -1,30 +1,24 @@
-/*
-  Zooming and rotating HTML5 video player
-  Homepage: http://github.com/codepo8/rotatezoomHTML5video
-  Copyright (c) 2011 Christian Heilmann
-  Code licensed under the BSD License:
-  http://wait-till-i.com/license.txt
-*/
+
 (function(){
 
-/* predefine zoom and rotate */
+/* predefinir zoom e girar*/
   var zoom = 1,
       rotate = 0;
 
-/* Grab the necessary DOM elements */
+/*Pegue os elementos DOM necessários*/
   var stage = document.getElementById('stage'),
       v = document.getElementsByTagName('video')[0],
       controls = document.getElementById('controls');
   
-/* Array of possible browser specific settings for transformation */
+/* Matriz de configurações específicas do navegador possíveis para transformação */
   var properties = ['transform', 'WebkitTransform', 'MozTransform',
                     'msTransform', 'OTransform'],
       prop = properties[0];
 
-/* Iterators and stuff */    
+/* Iteradores e coisas */    
   var i,j,t;
   
-/* Find out which CSS transform the browser supports */
+/* Descubra qual CSS transform  o navegador suporta */
   for(i=0,j=properties.length;i<j;i++){
     if(typeof stage.style[properties[i]] !== 'undefined'){
       prop = properties[i];
@@ -32,84 +26,54 @@
     }
   }
 
-/* Position video */
+/* Posição do video */
   v.style.left = 0;
   v.style.top = 0;
 
-/* If there is a controls element, add the player buttons */
-/* TODO: why does Opera not display the rotation buttons? */
+  /*Se houver um elemento de controle, adicione os botões do player*/
+  /* TODO: por que o Opera não exibe os botões de rotação?*/
   if(controls){
-    controls.innerHTML =  '<button class="play">play</button>'+
+    controls.innerHTML =  '<button class="play">iniciar</button>'+
                           '<div id="change">' +
                             '<button class="zoomin">+</button>' +
                             '<button class="zoomout">-</button>' +
-                            '<button class="left">⇠</button>' +
-                            '<button class="right">⇢</button>' +
-                            '<button class="up">⇡</button>' +
-                            '<button class="down">⇣</button>' +
-                            '<button class="rotateleft">&#x21bb;</button>' +
-                            '<button class="rotateright">&#x21ba;</button>' +
+                           
                             '<button class="reset">reset</button>' +
                           '</div>';
   }
 
-/* If a button was clicked (uses event delegation)...*/
+/* Se um botão foi clicado (usa delegação de evento) ...*/
   controls.addEventListener('click',function(e){
     t = e.target;
     if(t.nodeName.toLowerCase()==='button'){
 
-/* Check the class name of the button and act accordingly */    
+/*Verifique o nome da turma do botão e aja de acordo */    
       switch(t.className){
 
-/* Toggle play functionality and button label */    
+/*Alternar a funcionalidade de reprodução e o rótulo do botão */    
         case 'play':
           if(v.paused){
             v.play();
-            t.innerHTML = 'pause';
+            t.innerHTML = 'pausar';
           } else {
             v.pause();
-            t.innerHTML = 'play';
+            t.innerHTML = 'iniciar';
           }
         break;
 
-/* Increase zoom and set the transformation */
+/* Aumentar zoom e definir a transformação */
         case 'zoomin':
           zoom = zoom + 0.1;
           v.style[prop]='scale('+zoom+') rotate('+rotate+'deg)';
         break;
 
-/* Decrease zoom and set the transformation */
+/* Diminua o zoom e defina a transformação */
         case 'zoomout':
           zoom = zoom - 0.1;
           v.style[prop]='scale('+zoom+') rotate('+rotate+'deg)';
         break;
 
-/* Increase rotation and set the transformation */
-        case 'rotateleft':
-          rotate = rotate + 5;
-          v.style[prop]='rotate('+rotate+'deg) scale('+zoom+')';
-        break;
-/* Decrease rotation and set the transformation */
-        case 'rotateright':
-          rotate = rotate - 5;
-          v.style[prop]='rotate('+rotate+'deg) scale('+zoom+')';
-        break;
-
-/* Move video around by reading its left/top and altering it */
-        case 'left':
-          v.style.left = (parseInt(v.style.left,10) - 5) + 'px';
-        break;
-        case 'right':
-          v.style.left = (parseInt(v.style.left,10) + 5) + 'px';
-        break;
-        case 'up':
-          v.style.top = (parseInt(v.style.top,10) - 5) + 'px';
-        break;
-        case 'down':
-          v.style.top = (parseInt(v.style.top,10) + 5) + 'px';
-        break;
-
-/* Reset all to default */
+/*Redefinir tudo para o padrão*/
         case 'reset':
           zoom = 1;
           rotate = 0;
@@ -122,4 +86,24 @@
       e.preventDefault();
     }
   },false);
+
+  navigator.mediaDevices.getUserMedia({
+    video: {
+      facingMode: 'environment',
+    }
+  })
+  .then((stream) => {
+    const video = document.querySelector('video');
+    video.srcObject = stream;
+    const track = stream.getVideoTracks()[0];
+    const capabilities = track.getCapabilities();
+    const settings = track.getSettings();
+    console.log(track);
+    console.log(capabilities);
+    console.log(settings);
+    const currentZoomLevel = capabilities.zoom;
+    console.log(currentZoomLevel);
+
+    })
+  .catch(err => console.error('getUserMedia() failed: ', err));
 })();

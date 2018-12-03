@@ -6,40 +6,28 @@
 <title>Transforming video</title>
 <link rel="stylesheet" href="mainstyles.css" type="text/css">
 <style type="text/css" media="screen">
-  p{margin:1em 0;}
+
+  #stage{background:rgb(0, 0, 0);width:400px;height:300px;overflow:hidden;
+         position:relative;margin:2em 0;}
+  #stage span{font-size:20px;color:#666;display:block;padding:2em;}
+  video{width:400px;height:300px;position:absolute;top:0;left:0;}
+  #controls{position:relative;width:400px;}
+  #change{position:absolute;right:-100px;top:-300px;width:100px;}
+  button{font-size:150%;text-align:center;display:block;}
+  #change button{width:60px;border:none;background:#fff;}
+  
 </style>
 </head>
 <body>
-  <header><h1>Transforming HTML5 video with CSS3</h1></header>
-  <nav>
-    <ul>
-      <li><strong>Overview</strong></li>
-      <li><a href="rotate.html">Rotate and scale videos</a></li>
-      <li><a href="rotate-with-stages.html">Rotate and scale videos (cropped)</a></li>
-      <li><a href="transforming-video.html">Video Player with zoom and rotate</a></li>
-    </ul>
-  </nav>
-    <p>These are the demo files for the blog post on Mozilla about <a href="http://hacks.mozilla.org/2011/01/zooming-and-rotating-for-video-in-html5-and-css3/">scaling and rotating HTML5 video</a>.</p>
+ 
 
-    <p>This is the final outcome:</p>
+  <div id="stage">
+    <video autoplay></video>
 
-    <h2>Screencast:</h2>
-    
-
-    <video controls>
-      <source src="http://www.archive.org/download/RotatingAndZoomingHtml5VideoWithCss3/screencast2.mp4" type="video/mp4">         
-      <source src="http://www.archive.org/download/RotatingAndZoomingHtml5VideoWithCss3/screencast2.ogv" type="video/ogg">         
-        Your browser doesn't support the HTML5 video tag it seems. 
-           You can see this video 
-           <a href="http://www.archive.org/details/RotatingAndZoomingHtml5VideoWithCss3">
-             at archive.org</a>.
-
-    </video>
-
-  <footer>Written by <a href="http://wait-till-i.com">Chris Heilmann</a>, powered by HTML5 and <a href="http://archive.org">Archive.org</a> 
-    <span class="mark"><a href="http://www.w3.org/html/logo/">
-    <img src="html5-badge-h-css3-multimedia-semantics.png" width="197" height="64" alt="HTML5 Powered with CSS3 / Styling, Multimedia, and Semantics" title="HTML5 Powered with CSS3 / Styling, Multimedia, and Semantics"></a></span>
-  </footer>
+  </div>
+  <div id="controls"></div>
+ 
+  <script src="transformvideo.js"></script>
 </body>
 </html>
 
